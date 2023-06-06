@@ -19,11 +19,11 @@ class Product {
   @Column('int')
   quantity: number;
 
-  @CreateDateColumn() ///can i map field names to alias column names in typeorm
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @CreateDateColumn()
-  updated_at: Date;
+  @CreateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }
 
 export default Product;
