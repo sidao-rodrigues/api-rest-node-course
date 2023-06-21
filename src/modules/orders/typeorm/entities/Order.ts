@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import Customer from '@modules/customers/typeorm/entities/Customer';
-import OrdersProducts from './ordersProducts';
+import OrdersProducts from './OrdersProducts';
 
 @Entity('orders')
 class Order {
