@@ -1,8 +1,8 @@
 import { getCustomRepository } from 'typeorm';
 import mailConfig from '@config/mail/mail';
 import AppError from '@shared/errors/AppError';
-import UsersRepository from '../typeorm/repositories/UsersRepository';
-import UserTokenRepository from '../typeorm/repositories/UserTokensRepository';
+import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import UserTokenRepository from '../infra/typeorm/repositories/UserTokensRepository';
 import EtherealMail from '@config/mail/EtherealMail';
 import path from 'path';
 import SESMail from '@config/mail/SESMail';
