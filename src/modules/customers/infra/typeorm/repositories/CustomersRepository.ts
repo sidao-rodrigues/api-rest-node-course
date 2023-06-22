@@ -1,9 +1,16 @@
-import { ICUstomersRepository } from '@modules/customers/domain/repositories/ICustomersRepository';
+import { ICustomerPaginate } from './../../../domain/models/ICustomerPaginate';
+import { ICustomersRepository } from '@modules/customers/domain/repositories/ICustomersRepository';
 import { getRepository, Repository } from 'typeorm';
 import Customer from '../entities/Customer';
 import { ICreateCustomer } from '@modules/customers/domain/models/ICreateCustomer';
 
-class CustomersRepository implements ICUstomersRepository {
+interface ISearchParams {
+  page: number;
+  skip: number;
+  take: number;
+}
+
+class CustomersRepository implements ICustomersRepository {
   private ormRepository: Repository<Customer>;
 
   constructor() {
@@ -21,6 +28,29 @@ class CustomersRepository implements ICUstomersRepository {
   public async save(customer: Customer): Promise<Customer> {
     await this.ormRepository.save(customer);
     return customer;
+  }
+
+  public async remove(customer: Customer): Promise<void> {
+    await this.ormRepository.remove(customer);
+  }
+
+  public async findAll({
+    page,
+    skip,
+    take,
+  }: ISearchParams): Promise<ICustomerPaginate> {
+    const [customers, count] = await this.ormRepository
+      .createQueryBuilder()
+      .skip(skip)
+      .take(take)
+      .getManyAndCount();
+    const results = {
+      perPage: take,
+      total: count,
+      currentPage: page,
+      data: customers,
+    };
+    return results;
   }
 
   public async findByName(name: string): Promise<Customer | undefined> {

@@ -1,14 +1,14 @@
-import AppError from '@shared/errors/AppError';
-import { ICUstomersRepository } from '../domain/repositories/ICustomersRepository';
+import { ICustomersRepository } from '../domain/repositories/ICustomersRepository';
 import { ICreateCustomer } from '../domain/models/ICreateCustomer';
 import { ICustomer } from '../domain/models/ICustomer';
 import { inject, injectable } from 'tsyringe';
+import AppError from '@shared/errors/AppError';
 
 @injectable()
 class CreateCustomerService {
   constructor(
     @inject('CustomersRepository')
-    private customersRepository: ICUstomersRepository,
+    private customersRepository: ICustomersRepository,
   ) {}
 
   public async execute({ name, email }: ICreateCustomer): Promise<ICustomer> {
