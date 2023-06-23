@@ -21,7 +21,7 @@ describe('CreateCustomer', () => {
     expect(customer).toHaveProperty('id');
   });
 
-  it('should not be able to create twot customers with eh same email', async () => {
+  it('should not be able to create two customers with the same email', async () => {
     await createCustumer.execute({
       name: 'Sidney Rodrigues',
       email: 'teste@teste.com.br',
