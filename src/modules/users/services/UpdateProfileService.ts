@@ -1,14 +1,15 @@
-import { compare, hash } from 'bcryptjs';
 import AppError from '@shared/errors/AppError';
 import { IUpdateProfile } from '../domain/models/IUpdateProfile';
 import { IUser } from '../domain/models/IUser';
 import { inject, injectable } from 'tsyringe';
 import { IUsersRepository } from '../domain/repositories/IUsersRepository';
+import { IHashProvider } from '../providers/HashProvider/models/IHashProvider';
 
 @injectable()
 class UpdateProfileService {
   constructor(
     @inject('UsersRepository') private usersRepository: IUsersRepository,
+    @inject('HashProvider') private hashProvider: IHashProvider,
   ) {}
 
   public async execute({
@@ -35,13 +36,16 @@ class UpdateProfileService {
     }
 
     if (password && oldPassword) {
-      const checkOldPassword = await compare(oldPassword, user.password);
+      const checkOldPassword = await this.hashProvider.compareHash(
+        oldPassword,
+        user.password,
+      );
 
       if (!checkOldPassword) {
         throw new AppError('Old password does not match.');
       }
 
-      user.password = await hash(password, 8);
+      user.password = await this.hashProvider.generateHash(password);
     }
 
     user.name = name;
