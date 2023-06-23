@@ -1,11 +1,11 @@
 import AppError from '@shared/errors/AppError';
-import { inject, injectable } from 'tsyringe';
-import { IUsersRepository } from '../domain/repositories/IUsersRepository';
 import { IShowUser } from '../domain/models/IShowUser';
 import { IUser } from '../domain/models/IUser';
+import { inject, injectable } from 'tsyringe';
+import { IUsersRepository } from '../domain/repositories/IUsersRepository';
 
 @injectable()
-class ShowProfileService {
+class ShowUserService {
   constructor(
     @inject('UsersRepository') private usersRepository: IUsersRepository,
   ) {}
@@ -21,4 +21,4 @@ class ShowProfileService {
   }
 }
 
-export default ShowProfileService;
+export default ShowUserService;
