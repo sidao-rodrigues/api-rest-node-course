@@ -8,6 +8,7 @@ coverage
 ormconfig.json
 ormconfig_build.json
 dist
+.docker/dbdata
 
 uploads/*
 !uploads/.gitkeep

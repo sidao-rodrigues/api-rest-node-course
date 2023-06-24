@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  app:
+    #pegando o dockerfile que está na raiz do projeto
+    build: .
+    entrypoint: .docker/entrypoint.sh ##lembre-se de dar permissão ao arquivo chmod +x ./docker/entrypoint.sh
+    container_name: apivendas-app
+    ports:
+      - "3333:3333"
+    volumes: #espelha o conteudo da raiz do projeto para o workdir do docker
+      - .:/home/node/app
+    depends_on: #serviço só irá subir quando estes já estiverem rodando
+      - db
+      - redis
+
+  db:
+    build: .docker/postgres
+    container_name: apivendas-db
+    restart: always #sempre fazer restart quando houver de serviço
+    tty: true #interagir com o cainter
+    ports:
+      - "5432:5432"
+    volumes:
+      - .docker/dbdata:/var/lib/postgres/data
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=apivendas
+
+  redis:
+    image: 'bitnami/redis:latest' #pega uma image do dockerhub
+    container_name: apivendas-redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: apivendas-pgadmin
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
