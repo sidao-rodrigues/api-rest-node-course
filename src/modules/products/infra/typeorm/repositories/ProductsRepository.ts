@@ -1,4 +1,5 @@
-import { In, Repository, getRepository } from 'typeorm';
+import { dataSource } from '@shared/infra/typeorm/index';
+import { In, Repository } from 'typeorm';
 import Product from '../entities/Product';
 import { IProductsRepository } from '@modules/products/domain/repositories/IProductsRepository';
 import { ICreateProduct } from '@modules/products/domain/models/ICreateProduct';
@@ -16,7 +17,7 @@ export class ProductsRepository implements IProductsRepository {
   private ormRepository: Repository<Product>;
 
   constructor() {
-    this.ormRepository = getRepository(Product);
+    this.ormRepository = dataSource.getRepository(Product);
   }
 
   public async create({
@@ -45,20 +46,16 @@ export class ProductsRepository implements IProductsRepository {
     await this.ormRepository.save(products);
   }
 
-  public async findByName(name: string): Promise<Product | undefined> {
-    const product = await this.ormRepository.findOne({
-      where: {
-        name,
-      },
+  public async findByName(name: string): Promise<Product | null> {
+    const product = await this.ormRepository.findOneBy({
+      name,
     });
     return product;
   }
 
-  public async findById(id: string): Promise<Product | undefined> {
-    const product = await this.ormRepository.findOne({
-      where: {
-        id,
-      },
+  public async findById(id: string): Promise<Product | null> {
+    const product = await this.ormRepository.findOneBy({
+      id,
     });
     return product;
   }

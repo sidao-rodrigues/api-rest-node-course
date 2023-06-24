@@ -2,7 +2,7 @@ import { ICreateUser } from '../models/ICreateUser';
 import { IPaginateUser } from '../models/IPaginateUser';
 import { IUser } from '../models/IUser';
 
-type SearchParams = {
+export type SearchParams = {
   page: number;
   skip: number;
   take: number;
@@ -10,9 +10,9 @@ type SearchParams = {
 
 export interface IUsersRepository {
   findAll({ page, skip, take }: SearchParams): Promise<IPaginateUser>;
-  findById(name: string): Promise<IUser | undefined>;
-  findByName(name: string): Promise<IUser | undefined>;
-  findByEmail(email: string): Promise<IUser | undefined>;
+  findById(name: string): Promise<IUser | null>;
+  findByName(name: string): Promise<IUser | null>;
+  findByEmail(email: string): Promise<IUser | null>;
   create(data: ICreateUser): Promise<IUser>;
   save(user: IUser): Promise<IUser>;
 }

@@ -11,8 +11,8 @@ type SearchParams = {
 };
 
 export interface IProductsRepository {
-  findByName(name: string): Promise<IProduct | undefined>;
-  findById(id: string): Promise<IProduct | undefined>;
+  findByName(name: string): Promise<IProduct | null>;
+  findById(id: string): Promise<IProduct | null>;
   findAll({ page, skip, take }: SearchParams): Promise<IPaginateProduct>;
   findAllByIds(products: IFindProducts[]): Promise<IProduct[]>;
   create(data: ICreateProduct): Promise<IProduct>;

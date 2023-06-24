@@ -1,24 +1,23 @@
-import { Repository, getRepository } from 'typeorm';
+import { dataSource } from '@shared/infra/typeorm/index';
+import { Repository } from 'typeorm';
 import Order from '../entities/Order';
-import { IOrdersRepository } from '@modules/orders/domain/repositories/IOrdersRepository';
+import {
+  IOrdersRepository,
+  SearchParams,
+} from '@modules/orders/domain/repositories/IOrdersRepository';
 import { IPaginateOrder } from '@modules/orders/domain/models/IPaginateOrder';
 import { ICreateOrder } from '@modules/orders/domain/models/ICreateOrder';
-
-type SearchParams = {
-  page: number;
-  skip: number;
-  take: number;
-};
 
 class OrdersRepository implements IOrdersRepository {
   private ormRepository: Repository<Order>;
 
   constructor() {
-    this.ormRepository = getRepository(Order);
+    this.ormRepository = dataSource.getRepository(Order);
   }
 
-  public async findById(id: string): Promise<Order | undefined> {
-    const order = await this.ormRepository.findOne(id, {
+  public async findById(id: string): Promise<Order | null> {
+    const order = await this.ormRepository.findOne({
+      where: { id },
       relations: ['orderProducts', 'customer'],
     });
     return order;
